@@ -10,5 +10,6 @@ export const uploadFile = async (file) => {
 
 export const checkIframeAllowed = async (url) => {
   const res = await axios.get(`http://localhost:5000/check-frame?url=${encodeURIComponent(url)}`);
-  return res.data.blocked;
+  // Return the full object so the frontend can check offline status and HTTP codes
+  return res.data;
 };

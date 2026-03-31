@@ -27,31 +27,56 @@ app.post("/upload", upload.single("file"), (req, res) => {
   }
 });
 
-
 app.get("/check-frame", async (req, res) => {
   const targetUrl = req.query.url;
   if (!targetUrl) return res.status(400).json({ error: "URL required" });
 
   try {
-    // Make a lightweight HEAD request to grab headers
-    const response = await fetch(targetUrl, { method: "HEAD" });
+    const headers = {
+      // Mimic a real browser to bypass basic bot-protection
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    };
+
+    // 1. Try a lightweight HEAD request first
+    let response = await fetch(targetUrl, { method: "HEAD", headers });
+
+    // 2. If the server rejects HEAD requests (e.g., 405 or 403), fallback to a GET request
+    if (!response.ok) {
+      response = await fetch(targetUrl, { method: "GET", headers });
+    }
+
     const xFrameOptions = response.headers.get("x-frame-options");
     const csp = response.headers.get("content-security-policy");
 
     let blocked = false;
 
-    // Check common headers that block iframes
+    // 3. Check common headers that block iframes
     if (xFrameOptions && (xFrameOptions.toUpperCase() === "DENY" || xFrameOptions.toUpperCase() === "SAMEORIGIN")) {
       blocked = true;
     }
+
     if (csp && csp.toLowerCase().includes("frame-ancestors")) {
       blocked = true;
     }
 
-    res.json({ blocked });
+    // Optional: Severe error statuses (like 403/401) from security firewalls usually mean blocked
+    if (!response.ok && !xFrameOptions && !csp) {
+      if (response.status === 403 || response.status === 401) {
+         blocked = true;
+      }
+    }
+
+    // Return a richer object with status and offline flags
+    res.json({
+        blocked,
+        offline: false,
+        status: response.status,
+        ok: response.ok
+    });
+
   } catch (err) {
-    // If the fetch fails entirely (e.g., severe CORS restrictions or invalid URL), assume blocked
-    res.json({ blocked: true });
+    // If the fetch fails entirely (e.g., DNS fail, invalid URL, domain dead)
+    res.json({ blocked: false, offline: true });
   }
 });
 
