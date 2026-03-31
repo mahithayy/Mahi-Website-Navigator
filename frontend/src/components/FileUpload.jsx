@@ -8,7 +8,6 @@ export default function FileUpload({ setUrls }) {
   const handleUpload = async (e) => {
     const file = e.target.files[0];
 
-    //  VALIDATION
     if (!file) {
       setError("Please select a file");
       return;
@@ -27,7 +26,8 @@ export default function FileUpload({ setUrls }) {
 
       setUrls(data.urls);
     } catch (err) {
-      setError("Upload failed");
+      // show backend error if available
+      setError(err.response?.data?.error || "Upload failed");
     } finally {
       setLoading(false);
     }
@@ -36,7 +36,6 @@ export default function FileUpload({ setUrls }) {
   return (
     <div>
       <input type="file" onChange={handleUpload} />
-
       {loading && <p>Uploading...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
