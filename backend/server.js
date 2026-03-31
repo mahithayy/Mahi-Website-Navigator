@@ -2,6 +2,7 @@ const express = require("express");
 const multer = require("multer");
 const cors = require("cors");
 const XLSX = require("xlsx");
+const fs = require("fs");
 
 // ensure fetch works in all Node versions
 const fetch = global.fetch || require("node-fetch");
@@ -12,16 +13,17 @@ app.use(cors());
 const upload = multer({ dest: "uploads/" });
 
 app.post("/upload", upload.single("file"), (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ error: "File required" });
-    }
+  // Check for file before entering the try-catch block
+  if (!req.file) {
+    return res.status(400).json({ error: "File required" });
+  }
 
+  try {
     const file = XLSX.readFile(req.file.path);
     const sheet = file.Sheets[file.SheetNames[0]];
     const data = XLSX.utils.sheet_to_json(sheet);
 
-    //  handle different column names + remove invalid values
+    // handle different column names + remove invalid values
     const urls = data
       .map((row) => row.url || row.URL || row.link)
       .filter((url) => typeof url === "string" && url.trim() !== "");
@@ -29,6 +31,17 @@ app.post("/upload", upload.single("file"), (req, res) => {
     res.json({ urls });
   } catch (err) {
     res.status(500).json({ error: "File processing failed" });
+  } finally {
+    //logic for deleting the uploaded file after processing
+    if (req.file && req.file.path) {
+      fs.unlink(req.file.path, (err) => {
+        if (err) {
+          console.error("Failed to delete temporary file:", err);
+        } else {
+          console.log(`Successfully deleted temp file: ${req.file.path}`);
+        }
+      });
+    }
   }
 });
 
