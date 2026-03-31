@@ -1,38 +1,186 @@
+/* Main App Layout */
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  padding-bottom: 40px;
+}
+
+/* Navbar */
+.navbar {
+  width: 100%;
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
   color: white;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 40px;
 }
 
-.App-link {
-  color: #61dafb;
+.navbar h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+/* Reusable Card Container */
+.card-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  padding: 30px;
+  width: 90%;
+  max-width: 900px;
+  margin-bottom: 24px;
+  border: 1px solid #e2e8f0;
+}
+
+/* --- File Upload Styling --- */
+.file-upload-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+input[type="file"] {
+  border: 2px dashed #cbd5e1;
+  padding: 20px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+  background-color: #f8fafc;
+}
+
+input[type="file"]:hover {
+  border-color: #4f46e5;
+}
+
+/* Styles the actual "Choose File" button inside the input */
+input[type="file"]::file-selector-button {
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  margin-right: 15px;
+  transition: background-color 0.3s ease;
+}
+
+input[type="file"]::file-selector-button:hover {
+  background-color: #4338ca;
+}
+
+/* --- Navigator Styling --- */
+.counter-text {
+  text-align: center;
+  color: #64748b; /* Muted color */
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.nav-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+button {
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(79, 70, 229, 0.3);
+}
+
+button:hover:not(:disabled) {
+  background-color: #4338ca;
+  transform: translateY(-2px); /* Slight lift effect */
+  box-shadow: 0 4px 8px rgba(79, 70, 229, 0.4);
+}
+
+button:disabled {
+  background-color: #cbd5e1;
+  color: #94a3b8;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.external-link {
+  display: block;
+  text-align: center;
+  color: #4f46e5;
+  text-decoration: none;
+  font-weight: 500;
+  margin-bottom: 20px;
+  transition: color 0.2s ease;
+}
+
+.external-link:hover {
+  color: #3730a3;
+  text-decoration: underline;
+}
+
+/* --- Iframe Container --- */
+.iframe-wrapper {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #f1f5f9;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+iframe {
+  border: none;
+  width: 100%;
+  height: 500px;
+  background-color: white;
+}
+
+/* --- Status Messages --- */
+.status-message {
+  text-align: center;
+  padding: 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.status-loading { color: #0284c7; background: #e0f2fe; }
+.status-warning { color: #b45309; background: #fef3c7; }
+.status-error { color: #b91c1c; background: #fee2e2; }
+
+/* --- Responsive Design --- */
+@media (max-width: 600px) {
+  .card-container {
+    padding: 20px;
+    width: 95%;
   }
-  to {
-    transform: rotate(360deg);
+
+  .nav-buttons {
+    flex-direction: column;
+  }
+
+  button {
+    width: 100%;
   }
 }

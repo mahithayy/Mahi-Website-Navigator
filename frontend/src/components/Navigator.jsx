@@ -98,70 +98,56 @@ export default function Navigator({ urls }) {
   };
 
   return (
-    <div style={{ marginTop: "20px" }}>
-      <p>
-        <strong>{index + 1}</strong> / {urls.length}
+    <div className="card-container">
+      <p className="counter-text">
+        Showing website <strong>{index + 1}</strong> of {urls.length}
       </p>
 
-      <div style={{ marginBottom: "10px" }}>
+      <div className="nav-buttons">
         <button onClick={prev} disabled={index === 0}>
           ⬅ Previous
         </button>
-        <button
-          onClick={next}
-          disabled={index === urls.length - 1}
-          style={{ marginLeft: "10px" }}
-        >
+        <button onClick={next} disabled={index === urls.length - 1}>
           Next ➡
         </button>
       </div>
 
-      <div style={{ marginBottom: "10px" }}>
-        <a href={urls[index]} target="_blank" rel="noreferrer">
-          🔗 Open in new tab
-        </a>
+      <a className="external-link" href={urls[index]} target="_blank" rel="noreferrer">
+        🔗 Open current website in new tab
+      </a>
+
+      <div className="iframe-wrapper">
+        {loading && !mixedContent && !offline && !iframeBlocked && (
+          <div className="status-message status-loading">Loading website...</div>
+        )}
+
+        {timeoutWarning && loading && (
+          <div className="status-message status-warning">
+            This site is taking a long time to respond.
+          </div>
+        )}
+
+        {badStatus && !iframeBlocked && !offline && !mixedContent && (
+          <div className="status-message status-warning">
+            HTTP {badStatus} — page may look broken
+          </div>
+        )}
+
+        {mixedContent ? (
+          <div className="status-message status-error">Mixed Content Error: Cannot load HTTP site on HTTPS</div>
+        ) : offline ? (
+          <div className="status-message status-error">Site Unreachable or Offline</div>
+        ) : iframeBlocked ? (
+          <div className="status-message status-error">Security Restriction: This site blocks iframes</div>
+        ) : (
+          <iframe
+            src={urls[index]}
+            title="website"
+            onLoad={handleIframeLoad}
+            style={{ display: loading ? "none" : "block" }}
+          />
+        )}
       </div>
-
-      {loading && !mixedContent && !offline && !iframeBlocked && (
-        <p>Loading website...</p>
-      )}
-
-      {timeoutWarning && loading && (
-        <p style={{ color: "#d39e00" }}>
-          This site is taking a long time to respond.
-        </p>
-      )}
-
-      {badStatus && !iframeBlocked && !offline && !mixedContent && (
-        <div style={{ backgroundColor: "#fff3cd", padding: "10px" }}>
-          HTTP {badStatus} — page may look broken
-        </div>
-      )}
-
-      {mixedContent ? (
-        <div>
-          <p>Mixed Content Error</p>
-        </div>
-      ) : offline ? (
-        <div>
-          <p>Site Unreachable</p>
-        </div>
-      ) : iframeBlocked ? (
-        <div>
-          <p>Security Restriction</p>
-        </div>
-      ) : (
-        <iframe
-          src={urls[index]}
-          title="website"
-          width="100%"
-          height="500px"
-          onLoad={handleIframeLoad}
-          style={{
-            display: loading ? "none" : "block",
-          }}
-        />
-      )}
     </div>
   );
 }

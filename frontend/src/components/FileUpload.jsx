@@ -34,10 +34,10 @@ export default function FileUpload({ setUrls }) {
   };
 
   return (
-    <div>
+    <div className="card-container file-upload-wrapper">
       <input type="file" onChange={handleUpload} />
-      {loading && <p>Uploading...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {loading && <p style={{ color: "#4f46e5", fontWeight: "500" }}>Uploading...</p>}
+      {error && <p style={{ color: "#b91c1c", fontWeight: "500" }}>{error}</p>}
     </div>
   );
 }
