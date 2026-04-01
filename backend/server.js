@@ -1,9 +1,12 @@
+require("dotenv").config();
 const express = require("express");
 const multer = require("multer");
 const cors = require("cors");
 const XLSX = require("xlsx");
 const fs = require("fs");
+const mongoose = require("mongoose");
 
+const UrlList = require("./models/UrlList");
 // ensure fetch works in all Node versions
 const fetch = global.fetch || require("node-fetch");
 
@@ -12,7 +15,12 @@ app.use(cors());
 
 const upload = multer({ dest: "uploads/" });
 
-app.post("/upload", upload.single("file"), (req, res) => {
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log(" Connected to MongoDB"))
+  .catch((err) => console.error(" MongoDB connection error:", err));
+
+app.post("/upload", upload.single("file"), async (req, res) => {
   // Check for file before entering the try-catch block
   if (!req.file) {
     return res.status(400).json({ error: "File required" });
@@ -37,8 +45,19 @@ app.post("/upload", upload.single("file"), (req, res) => {
     return normalizedRow.url || normalizedRow.link;
   })
   .filter((url) => typeof url === "string" && url.trim() !== "");
+  if (urls.length > 0) {
+      // 1. Create a new document using the model
+      const newUploadRecord = new UrlList({
+        urls: urls
+      });
+
+      // 2. Save it to MongoDB
+      await newUploadRecord.save();
+      console.log(` Saved ${urls.length} URLs to the database!`);
+    }
     res.json({ urls });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: "File processing failed" });
   } finally {
     //logic for deleting the uploaded file after processing
