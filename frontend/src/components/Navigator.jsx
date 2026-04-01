@@ -102,6 +102,9 @@ export default function Navigator({ urls }) {
       <p className="counter-text">
         Showing website <strong>{index + 1}</strong> of {urls.length}
       </p>
+      <p className="current-url">
+  🔗 {urls[index]}
+</p>
 
       <div className="nav-buttons">
         <button onClick={prev} disabled={index === 0}>

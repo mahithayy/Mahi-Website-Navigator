@@ -27,13 +27,19 @@
 /* Reusable Card Container */
 .card-container {
   background: white;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+  padding: 32px;
   width: 90%;
   max-width: 900px;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
   border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.card-container:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
 }
 
 /* --- File Upload Styling --- */
@@ -103,7 +109,8 @@ button {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(79, 70, 229, 0.3);
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
 }
 
 button:hover:not(:disabled) {
@@ -138,14 +145,14 @@ button:disabled {
 /* --- Iframe Container --- */
 .iframe-wrapper {
   border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
-  background-color: #f1f5f9;
-  min-height: 500px;
+  background-color: #f8fafc;
+  min-height: 520px;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
+  transition: all 0.3s ease;
 }
 
 iframe {
@@ -183,4 +190,35 @@ iframe {
   button {
     width: 100%;
   }
+}
+.upload-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.upload-subtitle {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin-bottom: 10px;
+}
+
+.file-name {
+  font-size: 0.95rem;
+  color: #4f46e5;
+  font-weight: 500;
+}
+.current-url {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #475569;
+  background: #f1f5f9;
+  padding: 10px 14px;
+  border-radius: 999px;
+  margin-bottom: 18px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border: 1px solid #e2e8f0;
 }

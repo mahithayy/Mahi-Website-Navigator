@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <>
       <div className="navbar">
-        <h1>🌐 Website Navigator</h1>
+        <h1>🌐 Mahitha's Website Navigator</h1>
       </div>
 
       <FileUpload setUrls={setUrls} />
