@@ -25,9 +25,18 @@ app.post("/upload", upload.single("file"), (req, res) => {
 
     // handle different column names + remove invalid values
     const urls = data
-      .map((row) => row.url || row.URL || row.link)
-      .filter((url) => typeof url === "string" && url.trim() !== "");
+  .map((row) => {
+    // normalize keys (remove spaces + lowercase)
+    const normalizedRow = {};
 
+    Object.keys(row).forEach((key) => {
+      const cleanKey = key.trim().toLowerCase();
+      normalizedRow[cleanKey] = row[key];
+    });
+
+    return normalizedRow.url || normalizedRow.link;
+  })
+  .filter((url) => typeof url === "string" && url.trim() !== "");
     res.json({ urls });
   } catch (err) {
     res.status(500).json({ error: "File processing failed" });
