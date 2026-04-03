@@ -56,7 +56,7 @@ const handleRemove = () => {
       <p className="upload-subtitle">
         Supported formats: <strong>.xlsx, .csv</strong>
       </p>
-
+<p className="upload-subtitle">Note: Column header in the uploaded sheet should be "URL"</p>
       <input
         type="file"
         onChange={handleUpload}

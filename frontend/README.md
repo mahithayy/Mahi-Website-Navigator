@@ -1,70 +1,157 @@
-# Getting Started with Create React App
+README: Website Navigator (MERN Stack)
+A full-stack web application that allows users to upload an Excel/CSV file containing website URLs and navigate through them seamlessly within the app.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+ Live Demo
+🔗 Frontend: https://mahi-website-navigator.vercel.app/
+🔗 Backend API: https://mahi-website-navigator.onrender.com
 
-## Available Scripts
+No setup required — app is fully functional via deployed links.
 
-In the project directory, you can run:
+Features
+File Upload
+Upload .xlsx or .csv files
+Supports flexible column names (url, URL, link)
+Validates file input and displays errors
+URL Extraction
+Parses Excel/CSV using xlsx (Please note that column header should be "url")
+Normalizes column names (case-insensitive, trims spaces)
+Filters out invalid/empty values
+Website Navigation
+Displays websites inside an iframe
+Navigate websites using:
+⬅ Previous
+➡ Next
+Shows current index and URL
 
-### `npm start`
+Smart Error Handling
+Handles real-world edge cases:
+ Iframe blocked (X-Frame-Options / CSP)
+ Site offline/unreachable
+ Mixed content (HTTP inside HTTPS)
+ Slow-loading websites (timeout warning)
+ Invalid CSV / empty data
+ Fallback Mechanism
+If iframe fails → “Open in new tab” option provided
+ MongoDB Integration
+Stores uploaded URL lists in MongoDB Atlas
+Tracks upload timestamp
+Ensures persistence
+ UI/UX Enhancements
+Disabled file input after selection of a file.
+Remove file button
+File selection confirmation(shows a message after selection)
+Loading states & error messages
+Responsive, modern card-based UI
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Tech Stack
+Frontend
+React.js
+Axios
+CSS (custom styling)
+Backend
+Node.js
+Express.js
+Multer (file uploads)
+XLSX (file parsing)
+Node-Fetch
+Database
+MongoDB Atlas
+Mongoose
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+ Project Structure
+website-navigator/
+│
+├── frontend/
+│   ├── src/
+│   │   ├── api/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── App.js
+│   │   └── index.js
+│
+├── backend/
+│   ├── models/
+│   ├── uploads/ (temp files)
+│   ├── server.js
+│   ├── .env
+│   └── .gitignore
+│
+└── README.md
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+ Setup Instructions
+1️ Clone the repository
+git clone https://github.com/mahithayy/Mahi-Website-Navigator.git
+cd website-navigator
 
-### `npm run build`
+2️ Backend Setup
+cd backend
+npm install
+For local development
+Create a .env file inside backend/:
+MONGO_URI=your_mongodb_connection_string
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+For deployed app (Render)
+No setup required — environment variables are already configured.
+Start backend:
+node server.js
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+3️ Frontend Setup
+cd frontend
+npm install
+npm start
 
-### `npm run eject`
+API Endpoints
+Upload File
+POST /upload
+Accepts: Excel/CSV file
+Returns: Extracted URLs
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Check Iframe Compatibility
+GET /check-frame?url=<website_url>(ex: https://wikipedia.org)
+Returns:
+{
+  blocked: boolean,
+  offline: boolean,
+  status: number,
+  ok: boolean
+}
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+ Key Technical Decisions
+1. Robust CSV/Excel Parsing
+Normalizes column names (trim + lowercase)
+Handles inconsistent formats
+2. Iframe Restrictions Handling
+Backend checks headers (X-Frame-Options, CSP)
+Frontend fallback for unreliable cases(Included an “Open in new tab” button)
+3. Hybrid Detection Strategy
+Backend validation + frontend timeout handling
+Ensures better real-world reliability
+4. File Cleanup
+Temporary uploaded files deleted after processing. Otherwise every upload is stored in the uploads/ folder.
+5. MongoDB Persistence
+Stores each upload batch. The data persists even if the user has removed file in the frontend.
+Enables future scalability (history, analytics)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+ Known Limitations
+Some websites block iframe embedding (security policies)
+Not all sites expose headers reliably (HEAD request limitations)
+Mixed content blocked on HTTPS
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+All these cases are handled gracefully with clear user feedback messages.
 
-## Learn More
+ Future Improvements
+ Upload history view (from MongoDB)
+ Search/filter URLs
+ Bookmark favorite websites
+ Analytics dashboard
+ Drag & drop file upload
+ Dark mode
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+ Author
+Mahitha Holla
+MERN Stack Developer
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+ License
+This project is for educational and assignment purposes.
